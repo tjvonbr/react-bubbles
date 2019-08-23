@@ -33,11 +33,19 @@ const BubblePage = () => {
       .catch(error => console.log(error.response))
   };
 
-  const deleteColor = deleteColor => {
+  const deleteColor = color => {
     axiosWithAuth()
-      .delete(`http://localhost:5000/api/colors/${deleteColor.id}`)
+      .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then(response => {
-        console.log(response.data)
+        console.log(response)
+        let listAfterDelete = colorList.map(color => {
+          if (color.id === response.data) {
+            return response.data
+          } else {
+            return color
+          }
+        })
+        setColorList(listAfterDelete);
       })
       .catch(error => console.log(error.response));
   };
@@ -47,7 +55,7 @@ const BubblePage = () => {
       <ColorList colors={colorList}
                   updateColors={setColorList} 
                   saveEdit={saveEdit} 
-                  deleteColor={deleteColor} />
+                  removeColor={deleteColor} />
       <Bubbles colors={colorList} />
     </>
   );
